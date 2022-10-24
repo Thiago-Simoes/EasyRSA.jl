@@ -8,6 +8,13 @@ This project is under development and totally free-to-use, feel free to contribu
 
 This project use as reference the original paper of RSA ("A Method for Obtaining Digital Signatures and Public-Key Cryptosystems").
 
+# How to install
+
+Just copy and paste the following command in Julia Terminal:
+```julia
+import Pkg; Pkg.add(url="https://github.com/Thiago-Simoes/RSA.jl")
+```
+
 # How to use
 
 ### Generating keys
