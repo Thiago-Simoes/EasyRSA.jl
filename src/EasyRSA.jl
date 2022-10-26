@@ -1,6 +1,7 @@
 module EasyRSA
 
-import Random # Usada para gerar números aleatórios para alguns calculos. Como verificação se é primo de forma probabilistíca 
+import Random
+using Primes
 
 export generate_p_q, generate_keys, encrypt, decrypt
 
@@ -8,65 +9,6 @@ struct RSAKey
     public::Bool
     key::BigInt
     n::BigInt
-end
-
-
-function prime_check(j::Union{Int64, BigInt}, k::Int64=10)::Bool
-    non_prime = [0,1,4,6,8,9]
-    primes_knowed = [2,3,5,7]
-
-    if typeof(j) <: Integer
-        if j in non_prime
-            return false
-        end
-        if j in primes_knowed
-            return true
-        end
-
-        s = 0
-        d = j-1
-
-        while d % 2 == 0
-            d>>=1
-            s+=1
-        end
-
-        @assert ((2^s * d) == j-1)
-
-        function compose_tests(a::Union{Int64, BigInt})::Bool
-            if powermod(a, d, j) == 1
-                return false
-            end
-            for i in 1:s
-                if powermod(a, 2^i * d, j) == j-1
-                    return false
-                end
-            end
-            return true  
-        end
-
-        for i in 1:k
-            a = rand(2:j)
-            if compose_tests(a)
-                return false
-            end
-        end
-
-        return true  
-    end
-
-    return false  
-end
-
-
-function mdc(G::T, Q::T)::T where T <: Union{BigInt, Int64}
-    if !(typeof(G) <: Integer || typeof(Q) <: Integer)
-        throw("G e Q devem ser inteiros!")
-    end
-    while Q != 0
-        G, Q = Q, G % Q
-    end
-    return G
 end
 
 
@@ -103,8 +45,8 @@ function generate_p_q(B::Int64=512)::Tuple{BigInt, BigInt}
 
     primes = []
     while length(primes) != 2
-        tmp = _randbits(B)
-        test = prime_check(tmp)
+        tmp = _generate_prime(B)
+        test = isprime(tmp)
         if test && !(tmp in primes)
             push!(primes, tmp)
         end
@@ -119,10 +61,10 @@ end
 
 function generate_e_d(p::T, q::T)::Tuple{T, T} where T <: Union{BigInt, Int64}
     totiente = (p-1)*(q-1)
-    e = rand(1:totiente)
+    e = rand(Random.RandomDevice(), 1:totiente)
     while true
-        e = rand(1:totiente)
-        if(mdc(totiente, e)==1)
+        e = rand(Random.RandomDevice(), 1:totiente)
+        if(gcd(totiente, e)==1)
             break
         end
     end
@@ -201,8 +143,27 @@ end
 
 function _randbits(n::Int64)::BigInt
     range = 2^BigInt(n-1):2^BigInt(n)-1
-    return rand(range)
+    return rand(Random.RandomDevice(), range)
 end
+
+
+function _generate_prime(bits::Integer)
+    function _near_prime(x::Integer)::Integer
+        return rand(Random.RandomDevice(), false:true) ? nextprime(x) : prevprime(x)
+    end
+    ret = nothing
+    random_number = _randbits(bits)
+    while (ret == nothing)
+        tmp = _near_prime(random_number)
+        if _bits_size(tmp) == bits && isprime(tmp)
+            ret = tmp
+        end
+    end
+    return ret
+end
+
+
+_bits_size(x::Integer)::Integer = floor(log2(x))+1
 
 
 function _split_n(s::Union{String, Int64}, n::Int64)::Vector
