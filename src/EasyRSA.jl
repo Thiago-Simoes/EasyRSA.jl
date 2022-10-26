@@ -1,4 +1,4 @@
-module RSA
+module EasyRSA
 
 import Random # Usada para gerar números aleatórios para alguns calculos. Como verificação se é primo de forma probabilistíca 
 
@@ -214,4 +214,4 @@ function _split_n(s::Union{String, Int64}, n::Int64)::Vector
     return ret
 end
 
-end # module RSA
+end # module EasyRSA
