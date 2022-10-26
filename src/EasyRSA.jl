@@ -5,8 +5,10 @@ using Primes
 
 export generate_p_q, generate_keys, encrypt, decrypt
 
+@enum RSAKeyType Public Private
+
 struct RSAKey
-    public::Bool
+    type::RSAKeyType
     key::BigInt
     n::BigInt
 end
@@ -73,10 +75,17 @@ function generate_e_d(p::T, q::T)::Tuple{T, T} where T <: Union{BigInt, Int64}
 end
 
 
+function generate_keypair(bits::Int64)::Tuple{RSAKey, RSAKey}
+    p, q = generate_p_q(bits)
+    keys = generate_keys(p, q)
+    return (keys[1], keys[2])    
+end
+
+
 function generate_keys(p::T, q::T)::Tuple{RSAKey, RSAKey} where T <: Union{BigInt, Int64}
     n::BigInt = p*q
     e::BigInt, d::BigInt = generate_e_d(p,q)
-    return (RSAKey(true, e, n), RSAKey(false, d, n))
+    return (RSAKey(Public, e, n), RSAKey(Private, d, n))
 end
 
 
