@@ -1,4 +1,4 @@
-name = "RSA"
+name = "EasyRSA"
 uuid = "b4defc91-9298-4b41-9db5-a0a0c325fc4f"
 authors = ["Thiago-Simoes <thiago.simoes@ufrj.br>"]
 version = "0.1.0"
@@ -6,3 +6,5 @@ version = "0.1.0"
 [deps]
 Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[compat]
