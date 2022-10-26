@@ -119,6 +119,26 @@ end
 
 # Auxiliary functions
 
+
+_bits_size(x::Integer)::Integer = floor(log2(x))+1
+
+
+function _generate_prime(bits::Integer)
+    function _near_prime(x::Integer)::Integer
+        return rand(Random.RandomDevice(), false:true) ? nextprime(x) : prevprime(x)
+    end
+    ret = nothing
+    random_number = _randbits(bits)
+    while (ret == nothing)
+        tmp = _near_prime(random_number)
+        if _bits_size(tmp) == bits && isprime(tmp)
+            ret = tmp
+        end
+    end
+    return ret
+end
+
+
 function _parser_from_int(m::Union{BigInt, Int64})::String
     msg::String = string(m)
     if length(msg) % 3 !== 0
@@ -145,25 +165,6 @@ function _randbits(n::Int64)::BigInt
     range = 2^BigInt(n-1):2^BigInt(n)-1
     return rand(Random.RandomDevice(), range)
 end
-
-
-function _generate_prime(bits::Integer)
-    function _near_prime(x::Integer)::Integer
-        return rand(Random.RandomDevice(), false:true) ? nextprime(x) : prevprime(x)
-    end
-    ret = nothing
-    random_number = _randbits(bits)
-    while (ret == nothing)
-        tmp = _near_prime(random_number)
-        if _bits_size(tmp) == bits && isprime(tmp)
-            ret = tmp
-        end
-    end
-    return ret
-end
-
-
-_bits_size(x::Integer)::Integer = floor(log2(x))+1
 
 
 function _split_n(s::Union{String, Int64}, n::Int64)::Vector
