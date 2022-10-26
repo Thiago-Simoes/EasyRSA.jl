@@ -1,4 +1,4 @@
-# RSA.jl
+# EasyRSA.jl
 
 This project **should not** be used in production environments under any circumstances.
 
