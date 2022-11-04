@@ -1,7 +1,7 @@
 name = "EasyRSA"
 uuid = "b4defc91-9298-4b41-9db5-a0a0c325fc4f"
 authors = ["Thiago-Simoes <thiago.simoes@ufrj.br>"]
-version = "0.1.0"
+version = "0.1.1"
 
 [deps]
 Primes = "27ebfcd6-29c5-5fa9-bf4b-fb8fc14df3ae"
