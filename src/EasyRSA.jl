@@ -3,7 +3,7 @@ module EasyRSA
 import Random
 using Primes
 
-export generate_p_q, generate_keys, encrypt, decrypt
+export generate_p_q, generate_keys, generate_keypair, encrypt, decrypt
 
 @enum RSAKeyType Public Private
 
