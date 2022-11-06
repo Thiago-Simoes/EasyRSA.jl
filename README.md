@@ -12,7 +12,7 @@ This project use as reference the original paper of RSA ("A Method for Obtaining
 
 Just copy and paste the following command in Julia Terminal:
 ```julia
-import Pkg; Pkg.add(url="https://github.com/Thiago-Simoes/EasyRSA.jl")
+import Pkg; Pkg.add("EasyRSA")
 ```
 
 # How to use
